@@ -1,4 +1,4 @@
-package com.major.mylog.Controller;
+package com.major.mylog.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

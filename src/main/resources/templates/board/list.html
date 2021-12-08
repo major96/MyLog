@@ -27,10 +27,32 @@
     <main>
         <h1><b>Projects</b></h1>
         <hr class="col-3 col-md-2 mb-5">
+        <div class="container">
+            <div>
+                총 건수 : <span th:text="${#lists.size(posts)}"></span>
+            </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">번호</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="post : ${posts}">
+                        <td th:text="${post.id}">
+                        <td><a th:text="${post.title}" th:href="@{/board/form(id=${post.id})}">Mark</a></td>
+                        <td th:text="${post.text}">Otto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            <div class="text-end">
+                <a type="button" class="btn btn-primary" th:href="@{/board/form}">쓰기</a>
+            </div>
+            </div>
+
     </main>
-    <footer class="pt-5 my-5 text-muted border-top">
-        Created by the Bootstrap team &middot; &copy; 2021
-    </footer>
 </div>
 
 
