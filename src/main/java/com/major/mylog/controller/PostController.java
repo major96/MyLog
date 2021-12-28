@@ -4,6 +4,10 @@ import com.major.mylog.model.Post;
 import com.major.mylog.repository.PostRepository;
 import com.major.mylog.validator.PostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,8 +27,14 @@ public class PostController {
     private PostValidator postvalidator;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Post> posts = postrepository.findAll();
+    public String list(Model model, @PageableDefault(size = 2) Pageable pageable,
+                       @RequestParam(required = false, defaultValue = "") String searchText) {
+        // Page<Post> posts = postrepository.findAll(pageable);
+        Page<Post> posts = postrepository.findByTitleContainingOrTextContaining(searchText, searchText, pageable);
+        int startPage = Math.max(1,posts.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(Math.max(1, posts.getTotalPages()), posts.getPageable().getPageNumber() + 4);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("posts", posts);
         return "board/list";
     }
@@ -35,6 +45,7 @@ public class PostController {
         if(id == null){
             model.addAttribute("post", new Post());
         }
+
         else{
             Post post = postrepository.findById(id).orElse(null);
             model.addAttribute("post", post);
